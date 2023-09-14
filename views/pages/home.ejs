@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <link rel="stylesheet" href="./styles/main.css">
+</head>
+<body>
+  <div id="container">
+    <h1>Top 10 users with greatest activity log (YTD)</h1>
+  </div>
+  <script>
+    (async () => {
+      // fetch data from api
+      const data = await fetch('/api/top10contacts')
+        .then(response => response.json())
+        .catch(error => console.log(error));
+
+      // ----------------------------------------------------------
+
+      // Create table
+      const containerDOM = document.getElementById('container');
+      const table = document.createElement('table');
+      table.border = "1"; // Add border for visual clarity
+
+      // Create table header
+      const thead = document.createElement('thead');
+      const headerRow = document.createElement('tr');
+      
+      // Add headers
+      Object.keys(data[0]).forEach(key => {
+        const th = document.createElement('th');
+        th.innerText = key;
+        headerRow.appendChild(th);
+      });
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+
+      // Create table body
+      const tbody = document.createElement('tbody');
+      data.forEach(rowData => {
+        const tr = document.createElement('tr');
+        Object.values(rowData).forEach(val => {
+          const td = document.createElement('td');
+          td.innerText = val;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+
+      // Append table to body
+      containerDOM.appendChild(table);
+    })()
+  </script>
+</body>
+</html>
